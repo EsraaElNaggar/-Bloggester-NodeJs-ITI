@@ -54,7 +54,7 @@ router.post('/register', upload, async (req, res) => {
         userTitle: req.body.userTitle,
         userEmail: req.body.userEmail,
         userPassword: hashPassword,
-        userImg: `${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.headers.host}/uploads/img.png`}`
+        userImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/img.png`}`
     });
     try {
         const savedUser = await user.save();

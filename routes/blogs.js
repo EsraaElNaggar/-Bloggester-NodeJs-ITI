@@ -45,7 +45,7 @@ router.post('/', verify, upload, async (req, res) => {
         userId: req.body.userId,
         blogTitle: req.body.blogTitle,
         blogBody: req.body.blogBody,
-        blogImg: `${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.headers.host}/uploads/blog.jpg`}`
+        blogImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/blog.jpg`}`
     });
 
     try {
@@ -72,7 +72,7 @@ router.put('/:blogId', verify, upload, async (req, res) => {
     const blog = new Blog({
         _id: req.params.blogId,
         userId: req.body.userId,
-        blogImg: req.body.blogImg,
+        blogImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/blog.jpg`}`,
         blogTitle: req.body.blogTitle,
         blogBody: req.body.blogBody
     });
