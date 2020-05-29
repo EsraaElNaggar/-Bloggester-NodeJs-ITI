@@ -3,6 +3,7 @@ const verify = require('./verifyToken');
 
 const { upload } = require('../middlewares/Blog')
 const Blog = require('../models/Blog');
+const { cloudinary } = require('../middlewares/Blog');
 
 
 // Get All blogs
@@ -44,12 +45,17 @@ router.post('/', verify, upload, async (req, res) => {
         tags = req.body.tags.split(",");
     }
 
+    if (req.file) {
+        const photo = await cloudinary.v2.uploader.upload(req.file.path);
+        req.body.photo = photo.url;
+    }
+
     const blog = new Blog({
         userId: req.body.userId,
         blogTitle: req.body.blogTitle,
         blogBody: req.body.blogBody,
         tags: tags,
-        blogImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/blog.jpg`}`
+        blogImg: req.file ? req.body.photo : 'https://res.cloudinary.com/db1ckwlpt/image/upload/v1590793718/blog.jpg.jpg'
     });
     // console.log(req.body.tags);
 
@@ -80,10 +86,15 @@ router.put('/:blogId', verify, upload, async (req, res) => {
         tags = req.body.tags.split(",");
     }
 
+    if (req.file) {
+        const photo = await cloudinary.v2.uploader.upload(req.file.path);
+        req.body.photo = photo.url;
+    }
+
     const blog = new Blog({
         _id: req.params.blogId,
         userId: req.body.userId,
-        blogImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/blog.jpg`}`,
+        blogImg: req.file ? req.body.photo : 'https://res.cloudinary.com/db1ckwlpt/image/upload/v1590793718/blog.jpg.jpg',
         blogTitle: req.body.blogTitle,
         blogBody: req.body.blogBody,
         tags: tags

@@ -1,17 +1,27 @@
-const multer = require('multer');
 const path = require("path");
+const multer = require('multer');
+const cloudinary = require('cloudinary');
 
-// Set The Storage Engine
-const storage = multer.diskStorage({
-    destination: './public/uploads',
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
+// // Set The Storage Engine
+// const storage = multer.diskStorage({
+//     destination: './public/uploads',
+//     filename: function (req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//     }
+// });
+
+// Cloudinary
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
 });
+
 
 // Init Upload
 const upload = multer({
-    storage: storage,
+    storage: multer.diskStorage({}),
     limits: { fileSize: 1000000000 },
     fileFilter: function (req, file, cb) {
         checkFileType(file, cb);
@@ -35,5 +45,6 @@ function checkFileType(file, cb) {
 }
 
 module.exports = {
-    upload
+    upload,
+    cloudinary
 }

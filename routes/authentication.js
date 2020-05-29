@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/User');
-const { upload } = require('../middlewares/Blog')
+const { upload } = require('../middlewares/Blog');
+const { cloudinary } = require('../middlewares/Blog');
 
 // Validation
 const Joi = require('@hapi/joi');
@@ -47,6 +48,13 @@ router.post('/register', upload, async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.userPassword, salt);
 
+    console.log(req.file);
+
+    if (req.file) {
+        const photo = await cloudinary.v2.uploader.upload(req.file.path);
+        req.body.photo = photo.url;
+        console.log(req.body.photo);
+    }
     // create new user
     const user = new User({
         firstName: req.body.firstName,
@@ -54,7 +62,7 @@ router.post('/register', upload, async (req, res) => {
         userTitle: req.body.userTitle,
         userEmail: req.body.userEmail,
         userPassword: hashPassword,
-        userImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/img.png`}`
+        userImg: req.file ? req.body.photo : 'https://res.cloudinary.com/db1ckwlpt/image/upload/v1590793717/img.png.png'
     });
     try {
         const savedUser = await user.save();

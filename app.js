@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 // var upload = multer({ dest: 'uploads/' })
 
+require('dotenv/config');
 
 const app = express();
-require('dotenv/config');
 
 
 // Middlewares
