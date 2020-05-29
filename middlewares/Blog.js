@@ -37,23 +37,3 @@ function checkFileType(file, cb) {
 module.exports = {
     upload
 }
-
-
-// app.post('/upload', (req, res) => {
-//     upload(req, res, (err) => {
-//         if (err) {
-//             res.json({ msg: err });
-//         } else {
-//             if (req.file == undefined) {
-//                 res.json({ msg: 'Error: No File Selected!' });
-//             } else {
-//                 console.log(`/uploads/${req.file.filename}`);
-
-//                 res.json({
-//                     msg: 'File Uploaded!',
-//                     file: `uploads/${req.file.filename}`
-//                 });
-//             }
-//         }
-//     });
-// });

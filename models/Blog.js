@@ -18,6 +18,9 @@ const BlogSchema = mongoose.Schema({
         type: String,
         default: 'blog.jpg'
     },
+    tags: {
+        type: [String],
+    },
     currentDate: {
         type: Date,
         default: Date.now

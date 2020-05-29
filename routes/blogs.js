@@ -39,14 +39,19 @@ router.get('/:blogId', async (req, res) => {
 
 // Add new blog
 router.post('/', verify, upload, async (req, res) => {
-    console.log(req.file);
+    let tags = [];
+    if (req.body.tags) {
+        tags = req.body.tags.split(",");
+    }
 
     const blog = new Blog({
         userId: req.body.userId,
         blogTitle: req.body.blogTitle,
         blogBody: req.body.blogBody,
+        tags: tags,
         blogImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/blog.jpg`}`
     });
+    // console.log(req.body.tags);
 
     try {
         const savedBlog = await blog.save();
@@ -69,12 +74,19 @@ router.delete('/:blogId', verify, async (req, res) => {
 // Update a specific blog
 
 router.put('/:blogId', verify, upload, async (req, res) => {
+
+    let tags = [];
+    if (req.body.tags) {
+        tags = req.body.tags.split(",");
+    }
+
     const blog = new Blog({
         _id: req.params.blogId,
         userId: req.body.userId,
         blogImg: `${req.protocol}://${req.headers.host}/uploads/${req.file ? req.file.filename : `${req.protocol}://${req.headers.host}/uploads/blog.jpg`}`,
         blogTitle: req.body.blogTitle,
-        blogBody: req.body.blogBody
+        blogBody: req.body.blogBody,
+        tags: tags
     });
     Blog.updateOne({ _id: req.params.blogId }, blog)
         .then((b) => {
