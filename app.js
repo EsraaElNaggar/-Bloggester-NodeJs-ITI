@@ -10,9 +10,9 @@ require('dotenv/config');
 
 
 // Middlewares
-app.use(express.static('./public'));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static('./public'));
 
 // Import Routes
 const blogsRoute = require('./routes/blogs');
