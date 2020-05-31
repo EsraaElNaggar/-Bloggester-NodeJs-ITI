@@ -27,7 +27,6 @@ const UserSchemna = mongoose.Schema({
     },
     userImg: {
         type: String,
-        required: false,
         default: 'img.png'
     },
     userTitle: {
